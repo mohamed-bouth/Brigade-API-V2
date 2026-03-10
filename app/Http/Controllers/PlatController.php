@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Plat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PlatController extends Controller
 {
@@ -75,7 +76,9 @@ class PlatController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Plat $id)
-    {
+    {   
+        Gate::authorize('update' , $id);
+
         $request->validate([
             'name' => 'required|min:3|max:64',
             'description' => 'required',
@@ -98,7 +101,8 @@ class PlatController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Plat $id)
-    {
+    {   
+        Gate::authorize('delete' , $id);
         $id->delete();
 
         return response()->json([
