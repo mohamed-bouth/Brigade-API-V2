@@ -6,8 +6,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Mime\Email;
+use App\Docs\AuthDocumentation;
 
-class AuthController extends Controller
+class AuthController extends Controller implements AuthDocumentation
 {
     public function register(Request $request){
 

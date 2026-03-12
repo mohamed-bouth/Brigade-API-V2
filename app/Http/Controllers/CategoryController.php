@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Docs\CategoryDocumentation;
 use App\Models\Category;
 use App\Models\Plat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
-class CategoryController extends Controller
+class CategoryController extends Controller implements CategoryDocumentation
 {
     /**
      * Display a listing of the resource.

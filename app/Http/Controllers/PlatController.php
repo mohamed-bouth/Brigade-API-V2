@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Plat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Docs\PlatDocumentation;
+use OpenApi\Attributes as OA;
 
-class PlatController extends Controller
+class PlatController extends Controller implements PlatDocumentation
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request)
     {
         $plats = Plat::where('user_id' , $request->user()->id)->get();
