@@ -28,11 +28,15 @@ interface CategoryDocumentation
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(
-            required: ["name"],
-            properties: [
-                new OA\Property(property: "name", type: "string", example: "Pizzas", description: "min:3 | max:64")
-            ]
+        content: new OA\MediaType(
+            mediaType: "multipart/form-data",
+            schema: new OA\Schema(
+                required: ["name", "image"],
+                properties: [
+                    new OA\Property(property: "name", type: "string", example: "Pizzas", description: "min:3 | max:64"),
+                    new OA\Property(property: "image", type: "string", format: "binary", description: "Image de la catégorie (jpeg, png, jpg, webp)")
+                ]
+            )
         )
     )]
     #[OA\Response(response: 201, description: "Catégorie créée avec succès")]
@@ -58,7 +62,7 @@ interface CategoryDocumentation
 
 
 
-    #[OA\Put(
+    #[OA\Post( // غيرنا هذا إلى Post لكي يقبل رفع الملفات
         path: "/api/categories/{id}",
         summary: "Modifier une catégorie existante",
         tags: ["Catégories"],
@@ -73,11 +77,16 @@ interface CategoryDocumentation
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(
-            required: ["name"],
-            properties: [
-                new OA\Property(property: "name", type: "string", example: "Burgers M")
-            ]
+        content: new OA\MediaType(
+            mediaType: "multipart/form-data",
+            schema: new OA\Schema(
+                required: ["_method", "name"], 
+                properties: [
+                    new OA\Property(property: "_method", type: "string", example: "PUT", description: "Astuce Laravel (Obligatoire)"),
+                    new OA\Property(property: "name", type: "string", example: "Burgers M"),
+                    new OA\Property(property: "image", type: "string", format: "binary", description: "Nouvelle image (Optionnelle)")
+                ]
+            )
         )
     )]
     #[OA\Response(response: 200, description: "Catégorie mise à jour avec succès")]

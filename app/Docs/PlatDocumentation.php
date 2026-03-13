@@ -28,13 +28,17 @@ interface PlatDocumentation
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(
-            required: ["name", "description", "price"],
-            properties: [
-                new OA\Property(property: "name", type: "string", example: "Tacos Poulet", description: "min:3 | max:64"),
-                new OA\Property(property: "description", type: "string", example: "Délicieux tacos avec frites et sauce algérienne"),
-                new OA\Property(property: "price", type: "number", format: "float", example: 45.50)
-            ]
+        content: new OA\MediaType(
+            mediaType: "multipart/form-data",
+            schema: new OA\Schema(
+                required: ["name", "description", "price", "image"], 
+                properties: [
+                    new OA\Property(property: "name", type: "string", example: "Tacos Poulet", description: "min:3 | max:64"),
+                    new OA\Property(property: "description", type: "string", example: "Délicieux tacos avec frites et sauce algérienne"),
+                    new OA\Property(property: "price", type: "number", format: "float", example: 45.50),
+                    new OA\Property(property: "image", type: "string", format: "binary", description: "Image du plat (jpeg, png, jpg, webp)")
+                ]
+            )
         )
     )]
     #[OA\Response(response: 201, description: "Plat créé avec succès")]
@@ -60,7 +64,7 @@ interface PlatDocumentation
 
 
 
-    #[OA\Put(
+    #[OA\Post( // غيرنا هذا إلى Post لكي تعمل واجهة رفع الملفات
         path: "/api/plats/{id}",
         summary: "Modifier un plat existant",
         tags: ["Plats"],
@@ -75,13 +79,18 @@ interface PlatDocumentation
     )]
     #[OA\RequestBody(
         required: true,
-        content: new OA\JsonContent(
-            required: ["name", "description", "price"],
-            properties: [
-                new OA\Property(property: "name", type: "string", example: "Tacos Viande Hachée"),
-                new OA\Property(property: "description", type: "string", example: "Modification de la description"),
-                new OA\Property(property: "price", type: "number", format: "float", example: 50.00)
-            ]
+        content: new OA\MediaType(
+            mediaType: "multipart/form-data",
+            schema: new OA\Schema(
+                required: ["_method", "name", "description", "price"], 
+                properties: [
+                    new OA\Property(property: "_method", type: "string", example: "PUT", description: "Astuce Laravel pour forcer la méthode PUT"),
+                    new OA\Property(property: "name", type: "string", example: "Tacos Viande Hachée"),
+                    new OA\Property(property: "description", type: "string", example: "Modification de la description"),
+                    new OA\Property(property: "price", type: "number", format: "float", example: 50.00),
+                    new OA\Property(property: "image", type: "string", format: "binary", description: "Nouvelle image (Optionnelle)")
+                ]
+            )
         )
     )]
     #[OA\Response(response: 200, description: "Plat mis à jour avec succès")]

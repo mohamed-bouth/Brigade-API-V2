@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Plat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller implements CategoryDocumentation
 {
@@ -38,11 +39,19 @@ class CategoryController extends Controller implements CategoryDocumentation
     {
         $request->validate([
             'name' => 'required|min:3|max:64',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
+
+        $imageUrl = null;
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('plats_images', 'r2');
+            $imageUrl = env('CLOUDFLARE_PUBLIC_URL') . '/' . $path;
+        }
 
         $category = Category::create([
             'name' => $request->name,
-            'user_id' => $request->user()->id
+            'user_id' => $request->user()->id,
+            'image' => $imageUrl
         ]);
 
         return response()->json([
@@ -80,10 +89,24 @@ class CategoryController extends Controller implements CategoryDocumentation
 
         $request->validate([
             'name' => 'required|min:3|max:64',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
+
+        if ($request->hasFile('image')) {
+        
+            if ($category->image) {
+                $publicUrl = rtrim(env('CLOUDFLARE_PUBLIC_URL'), '/');
+                $oldPath = str_replace($publicUrl . '/', '', $category->image);
+                
+                Storage::disk('r2')->delete($oldPath);
+            }
+            $newPath = $request->file('image')->store('categories', 'r2');
+            $category->image = rtrim(env('CLOUDFLARE_PUBLIC_URL'), '/') . '/' . $newPath;
+        }
 
         $id->update([
             'name' => $request->name,
+            'image' => $category->image
         ]);
 
         return response()->json([
@@ -99,6 +122,13 @@ class CategoryController extends Controller implements CategoryDocumentation
     {
         $category = $id;
         Gate::authorize('delete' , $category);
+
+        if($category->image){
+            $publicUrl = rtrim(env('CLOUDFLARE_PUBLIC_URL'), '/');
+            $oldPath = str_replace($publicUrl . '/', '', $category->image);
+            Storage::disk('r2')->delete($oldPath);
+        }
+
         $id->delete();
 
         return response()->json([

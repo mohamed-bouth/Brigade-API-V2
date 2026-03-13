@@ -146,16 +146,22 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "name"
+                                    "name",
+                                    "image"
                                 ],
                                 "properties": {
                                     "name": {
                                         "description": "min:3 | max:64",
                                         "type": "string",
                                         "example": "Pizzas"
+                                    },
+                                    "image": {
+                                        "description": "Image de la catégorie (jpeg, png, jpg, webp)",
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -204,12 +210,12 @@
                     }
                 ]
             },
-            "put": {
+            "post": {
                 "tags": [
                     "Catégories"
                 ],
                 "summary": "Modifier une catégorie existante",
-                "operationId": "ca0286eb4e1abd92788f6ef3c04e22c0",
+                "operationId": "cbf4800ab4c11f1a824259a93fbf4429",
                 "parameters": [
                     {
                         "name": "id",
@@ -224,15 +230,26 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "_method",
                                     "name"
                                 ],
                                 "properties": {
+                                    "_method": {
+                                        "description": "Astuce Laravel (Obligatoire)",
+                                        "type": "string",
+                                        "example": "PUT"
+                                    },
                                     "name": {
                                         "type": "string",
                                         "example": "Burgers M"
+                                    },
+                                    "image": {
+                                        "description": "Nouvelle image (Optionnelle)",
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -357,12 +374,13 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
                                     "name",
                                     "description",
-                                    "price"
+                                    "price",
+                                    "image"
                                 ],
                                 "properties": {
                                     "name": {
@@ -378,6 +396,11 @@
                                         "type": "number",
                                         "format": "float",
                                         "example": 45.5
+                                    },
+                                    "image": {
+                                        "description": "Image du plat (jpeg, png, jpg, webp)",
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -426,12 +449,12 @@
                     }
                 ]
             },
-            "put": {
+            "post": {
                 "tags": [
                     "Plats"
                 ],
                 "summary": "Modifier un plat existant",
-                "operationId": "ca2cd3c823360069169f280d038338df",
+                "operationId": "74121d46fd948d2c0407953566bb624d",
                 "parameters": [
                     {
                         "name": "id",
@@ -446,14 +469,20 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "_method",
                                     "name",
                                     "description",
                                     "price"
                                 ],
                                 "properties": {
+                                    "_method": {
+                                        "description": "Astuce Laravel pour forcer la méthode PUT",
+                                        "type": "string",
+                                        "example": "PUT"
+                                    },
                                     "name": {
                                         "type": "string",
                                         "example": "Tacos Viande Hachée"
@@ -466,6 +495,11 @@
                                         "type": "number",
                                         "format": "float",
                                         "example": 50
+                                    },
+                                    "image": {
+                                        "description": "Nouvelle image (Optionnelle)",
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"

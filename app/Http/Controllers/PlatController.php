@@ -6,6 +6,7 @@ use App\Models\Plat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Docs\PlatDocumentation;
+use Illuminate\Support\Facades\Storage;
 use OpenApi\Attributes as OA;
 
 class PlatController extends Controller implements PlatDocumentation
@@ -37,13 +38,21 @@ class PlatController extends Controller implements PlatDocumentation
         $request->validate([
             'name' => 'required|min:3|max:64',
             'description' => 'required',
-            'price' => 'required|numeric'
+            'price' => 'required|numeric',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
+
+        $imageUrl = null;
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('plats', 'r2');
+            $imageUrl = env('CLOUDFLARE_PUBLIC_URL') . '/' . $path;
+        }
 
         $plat = Plat::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
+            'image' => $imageUrl,
             'user_id' => $request->user()->id
         ]);
 
@@ -83,13 +92,27 @@ class PlatController extends Controller implements PlatDocumentation
         $request->validate([
             'name' => 'required|min:3|max:64',
             'description' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'price' => 'required|numeric'
         ]);
+
+        if ($request->hasFile('image')) {
+        
+            if ($plat->image) {
+                $publicUrl = rtrim(env('CLOUDFLARE_PUBLIC_URL'), '/');
+                $oldPath = str_replace($publicUrl . '/', '', $plat->image);
+                
+                Storage::disk('r2')->delete($oldPath);
+            }
+            $newPath = $request->file('image')->store('plats', 'r2');
+            $plat->image = rtrim(env('CLOUDFLARE_PUBLIC_URL'), '/') . '/' . $newPath;
+        }
 
         $id->update([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
+            'image' => $plat->image
         ]);
 
         return response()->json([
@@ -105,6 +128,13 @@ class PlatController extends Controller implements PlatDocumentation
     {   
         $plat = $id;
         Gate::authorize('delete' , $plat);
+
+        if($plat->image){
+            $publicUrl = rtrim(env('CLOUDFLARE_PUBLIC_URL'), '/');
+            $oldPath = str_replace($publicUrl . '/', '', $plat->image);
+            Storage::disk('r2')->delete($oldPath);
+        }
+
         $id->delete();
 
         return response()->json([
