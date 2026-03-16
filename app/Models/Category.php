@@ -8,8 +8,11 @@ class Category extends Model
 {
     protected $fillable = [
         'name',
+        'description',
+        'color',
         'user_id',
-        'image'
+        'image',
+        'is_active'
     ];
 
     public function user() {

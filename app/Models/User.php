@@ -3,6 +3,8 @@
 namespace App\Models;
 use App\Models\Category;
 use App\Models\Plat;
+use App\Models\Ingredient;
+use App\Models\Recommendation;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,7 +26,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'dietary_tags'
     ];
 
     /**
@@ -47,6 +50,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'dietary_tags' => 'array'
         ];
     }
 
@@ -56,5 +60,9 @@ class User extends Authenticatable
 
     public function plats() {
         return $this->hasMany(Plat::class);
+    }
+
+    public function recommendations(){
+        return $this->hasMany(Recommendation::class);
     }
 }

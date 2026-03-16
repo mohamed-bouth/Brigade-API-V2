@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('description');
             $table->string('image')->nullable();
+            $table->string('color')->nullable();
             $table->foreignId('user_id')->references('id')->on('users');
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }
