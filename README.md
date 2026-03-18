@@ -24,5 +24,5 @@ Follow these steps to set up the project locally:
 
 **1. Clone the repository**
 ```bash
-git clone <your-repository-url>
-cd <your-project-folder>
+git clone https://github.com/mohamed-bouth/Brigade-API-V2.git
+cd Brigade-API-V2

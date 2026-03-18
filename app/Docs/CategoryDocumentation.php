@@ -62,7 +62,7 @@ interface CategoryDocumentation
 
 
 
-    #[OA\Post( // غيرنا هذا إلى Post لكي يقبل رفع الملفات
+    #[OA\Post(
         path: "/api/categories/{id}",
         summary: "Modifier une catégorie existante",
         tags: ["Catégories"],
