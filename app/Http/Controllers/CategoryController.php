@@ -39,7 +39,9 @@ class CategoryController extends Controller implements CategoryDocumentation
     {
         $request->validate([
             'name' => 'required|min:3|max:64',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048'
+            'description' => 'max:256',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'color' => 'max:30'
         ]);
 
         $imageUrl = null;
@@ -50,8 +52,10 @@ class CategoryController extends Controller implements CategoryDocumentation
 
         $category = Category::create([
             'name' => $request->name,
+            'description' => $request->description,
             'user_id' => $request->user()->id,
-            'image' => $imageUrl
+            'image' => $imageUrl,
+            'color' => $request->color
         ]);
 
         return response()->json([
@@ -89,7 +93,9 @@ class CategoryController extends Controller implements CategoryDocumentation
 
         $request->validate([
             'name' => 'required|min:3|max:64',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
+            'description' => 'max:256',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'color' => 'max:30'
         ]);
 
         if ($request->hasFile('image')) {
@@ -106,7 +112,9 @@ class CategoryController extends Controller implements CategoryDocumentation
 
         $id->update([
             'name' => $request->name,
-            'image' => $category->image
+            'description' => $request->description,
+            'image' => $category->image,
+            'color' => 'max:30'
         ]);
 
         return response()->json([

@@ -13,6 +13,13 @@ class Ingredient extends Model
         'tags'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'tags' => 'array'
+        ];
+    }
+
     public function plats()
     {
         return $this->belongsToMany(Plat::class)->withTimestamps();

@@ -34,7 +34,9 @@ interface CategoryDocumentation
                 required: ["name", "image"],
                 properties: [
                     new OA\Property(property: "name", type: "string", example: "Pizzas", description: "min:3 | max:64"),
-                    new OA\Property(property: "image", type: "string", format: "binary", description: "Image de la catégorie (jpeg, png, jpg, webp)")
+                    new OA\Property(property: "descrption", type: "string", example: "this pizzas is very good", description: "max:255"),
+                    new OA\Property(property: "image", type: "string", format: "binary", description: "Image de la catégorie (jpeg, png, jpg, webp)"),
+                    new OA\Property(property: "color", type: "string", example: "red", description: "this input help front end guy"),
                 ]
             )
         )
@@ -83,8 +85,10 @@ interface CategoryDocumentation
                 required: ["_method", "name"], 
                 properties: [
                     new OA\Property(property: "_method", type: "string", example: "PUT", description: "Astuce Laravel (Obligatoire)"),
+                    new OA\Property(property: "descrption", type: "string", example: "this pizzas isn't good anymore", description: "max:255"),
                     new OA\Property(property: "name", type: "string", example: "Burgers M"),
-                    new OA\Property(property: "image", type: "string", format: "binary", description: "Nouvelle image (Optionnelle)")
+                    new OA\Property(property: "image", type: "string", format: "binary", description: "Nouvelle image (Optionnelle)"),
+                    new OA\Property(property: "color", type: "string", example: "green", description: "this input help front end guy"),
                 ]
             )
         )

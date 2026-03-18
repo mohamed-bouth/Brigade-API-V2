@@ -39,7 +39,7 @@ class PlatController extends Controller implements PlatDocumentation
             'name' => 'required|min:3|max:64',
             'description' => 'required',
             'price' => 'required|numeric',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048'
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $imageUrl = null;
@@ -93,7 +93,8 @@ class PlatController extends Controller implements PlatDocumentation
             'name' => 'required|min:3|max:64',
             'description' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'price' => 'required|numeric'
+            'price' => 'required|numeric',
+            'is_available' => 'required|numeric'
         ]);
 
         if ($request->hasFile('image')) {
@@ -112,7 +113,8 @@ class PlatController extends Controller implements PlatDocumentation
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'image' => $plat->image
+            'image' => $plat->image,
+            'is_available' => $request->is_available
         ]);
 
         return response()->json([
