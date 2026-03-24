@@ -9,6 +9,8 @@ use App\Docs\PlatDocumentation;
 use Illuminate\Support\Facades\Storage;
 use OpenApi\Attributes as OA;
 
+use function Symfony\Component\String\s;
+
 class PlatController extends Controller implements PlatDocumentation
 {
 
@@ -40,7 +42,9 @@ class PlatController extends Controller implements PlatDocumentation
             'description' => 'required',
             'price' => 'required|numeric',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            
         ]);
+
 
         $imageUrl = null;
         if ($request->hasFile('image')) {
@@ -55,6 +59,10 @@ class PlatController extends Controller implements PlatDocumentation
             'image' => $imageUrl,
             'user_id' => $request->user()->id
         ]);
+
+        if($request->ingredient_ids){
+            $plat->ingredients()->attach($request->ingredient_ids);
+        }
 
         return response()->json([
             'message' => 'plat has seccesfully created!',
@@ -94,7 +102,7 @@ class PlatController extends Controller implements PlatDocumentation
             'description' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'price' => 'required|numeric',
-            'is_available' => 'required|numeric'
+            'is_available' => 'numeric'
         ]);
 
         if ($request->hasFile('image')) {
@@ -114,8 +122,14 @@ class PlatController extends Controller implements PlatDocumentation
             'description' => $request->description,
             'price' => $request->price,
             'image' => $plat->image,
-            'is_available' => $request->is_available
+            'is_available' => 1
         ]);
+
+        $id->ingredients()->detach();
+        
+        if($request->ingredient_ids){
+            $plat->ingredients()->attach($request->ingredient_ids);
+        }
 
         return response()->json([
             'message' => 'plat has seccesfully updated!',

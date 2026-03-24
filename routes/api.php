@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\PlatController;
+use App\Http\Controllers\PreferenceController;
 use App\Http\Controllers\UserController;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
@@ -43,7 +44,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('plats/{id}' ,[PlatController::class , 'show']);
 
     Route::get('profile' , [UserController::class , 'show']);
-    Route::post('profile' , [UserController::class , 'store']);
+    Route::post('profile' , [PreferenceController::class , 'store']);
+    Route::put('profile/{id}' , [PreferenceController::class , 'update']);
 });
 
 

@@ -8,6 +8,7 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+    
     public function users(Request $request){
         $user = User::whereBetween('id', [$request->first, $request->last])->get();
 
@@ -24,13 +25,5 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request){
-
-        $user = $request->user();
-
-        $user->update(['dietary_tags' => $request->dietary_tags]);
-
-        return response()->json(['message' => 'the dietaries updated successfully',
-                                 'user' => $user]);         
-    }
+    
 }

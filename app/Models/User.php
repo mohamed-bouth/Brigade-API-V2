@@ -5,6 +5,7 @@ use App\Models\Category;
 use App\Models\Plat;
 use App\Models\Ingredient;
 use App\Models\Recommendation;
+use App\Models\Preference;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,7 +28,6 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'dietary_tags'
     ];
 
     /**
@@ -50,7 +50,6 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'dietary_tags' => 'array'
         ];
     }
 
@@ -64,5 +63,9 @@ class User extends Authenticatable
 
     public function recommendations(){
         return $this->hasMany(Recommendation::class);
+    }
+
+    public function preferences(){
+        return $this->hasMany(Preference::class);
     }
 }
