@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 class Recommendation extends Model
 {
     protected $fillable = [
+        'user_id',
+        'plat_id',
         'score',
         'warning_message',
         'status'

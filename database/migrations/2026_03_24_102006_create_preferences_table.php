@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->string('ingredient');
-            $table->enum('type' , ['likes_it' , 'dislikes_it' , 'allergic_to_it' , 'Not_preferred']);
+            $table->enum('type' , ['likes_it' , 'dislikes_it' , 'allergic_to_it' , 'not_preferred' , 'forbidden']);
             $table->timestamps();
         });
     }

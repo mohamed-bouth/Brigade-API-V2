@@ -6,9 +6,12 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\PlatController;
 use App\Http\Controllers\PreferenceController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RecommendationController;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+use  App\Services\GeminiService;
 
 
 Route::post('register' , [AuthController::class , 'register']);
@@ -46,8 +49,23 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('profile' , [UserController::class , 'show']);
     Route::post('profile' , [PreferenceController::class , 'store']);
     Route::put('profile/{id}' , [PreferenceController::class , 'update']);
+
+
+    Route::post('/recommendations/analyze/{id}' , [RecommendationController::class , 'analyze']);
+    Route::get('/recommendations' , [RecommendationController::class , 'history']);
+    Route::get('/recommendations/{id}' , [RecommendationController::class , 'show']);
+
 });
 
+Route::get('/gemini-test', function (GeminiService $gemini) {
+    return response()->json(
+        $gemini->generate('just say: success 200')
+    );
+});
+
+use App\Models\User;
+use App\Models\Plat;
+use App\Services\PlatRecommendationService;
 
 
 

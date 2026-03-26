@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('plat_id')->references('id')->on('plats');
-            $table->decimal('score');
-            $table->text('warning_message');
+            $table->decimal('score')->nullable();
+            $table->text('warning_message')->nullable();
             $table->enum('status' , ['processing', 'ready'])->default('processing');
             $table->timestamps();
         });
