@@ -60,7 +60,7 @@ class CategoryController extends Controller implements CategoryDocumentation
 
         return response()->json([
             'message' => 'category has seccesfully created!',
-            'plat' => $category
+            'category' => $category
         ] , 201);
     }
 
@@ -71,7 +71,7 @@ class CategoryController extends Controller implements CategoryDocumentation
     {
         return response()->json([
             'message' => 'this is your Category',
-            'plat' => $id
+            'category' => $id
         ]);
     }
 
@@ -114,7 +114,7 @@ class CategoryController extends Controller implements CategoryDocumentation
             'name' => $request->name,
             'description' => $request->description,
             'image' => $category->image,
-            'color' => 'max:30'
+            'color' => $request->color
         ]);
 
         return response()->json([

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\PlatController;
 use App\Http\Controllers\PreferenceController;
@@ -38,6 +39,8 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::post('ingredients' ,[IngredientController::class , 'store']);
         Route::put('ingredients/{id}' ,[IngredientController::class , 'update']);
         Route::delete('ingredients/{id}' ,[IngredientController::class , 'destroy']);
+
+        Route::get('dashboard',[DashboardController::class , 'index']);
     });
 
     Route::get('categories' ,[CategoryController::class , 'index']);
@@ -49,6 +52,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('profile' , [UserController::class , 'show']);
     Route::post('profile' , [PreferenceController::class , 'store']);
     Route::put('profile/{id}' , [PreferenceController::class , 'update']);
+    Route::get('profile/preferences', [PreferenceController::class, 'index']);
 
 
     Route::post('/recommendations/analyze/{id}' , [RecommendationController::class , 'analyze']);
@@ -57,15 +61,11 @@ Route::middleware('auth:sanctum')->group(function(){
 
 });
 
-Route::get('/gemini-test', function (GeminiService $gemini) {
-    return response()->json(
-        $gemini->generate('just say: success 200')
-    );
-});
-
-use App\Models\User;
-use App\Models\Plat;
-use App\Services\PlatRecommendationService;
+// Route::get('/gemini-test', function (GeminiService $gemini) {
+//     return response()->json(
+//         $gemini->generate('just say: success 200')
+//     );
+// });
 
 
 

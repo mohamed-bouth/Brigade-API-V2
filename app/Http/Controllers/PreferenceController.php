@@ -36,25 +36,27 @@ class PreferenceController extends Controller
 
         return response()->json(['message' => 'the Preference created successfully',
                                  'user' => $user,
-                                 'Preference' => $preference]);         
+                                 'Preference' => $preference],201);         
     }
 
-    public function update(Request $request , Preference $id){
-
+    public function update(Request $request, Preference $id)
+    {
         $user = $request->user();
 
         $request->validate([
             'ingredient' => 'required|max:30',
-            'type' => 'required'
+            'type' => 'required|in:likes_it,dislikes_it,allergic_to_it,not_preferred,forbidden',
         ]);
 
-        $preference = $id->update([
+        $id->update([
             'ingredient' => $request->ingredient,
-            'type' => $request->type
-            ]);
+            'type' => $request->type,
+        ]);
 
-        return response()->json(['message' => 'the Preference updated successfully',
-                                 'user' => $user,
-                                 'Preference' => $preference]);         
+        return response()->json([
+            'message' => 'the Preference updated successfully',
+            'user' => $user,
+            'Preference' => $id->fresh(),
+        ]);
     }
 }

@@ -124,11 +124,14 @@
                 "tags": [
                     "Catégories"
                 ],
-                "summary": "Afficher la liste des catégories de l'utilisateur",
+                "summary": "Afficher la liste des catégories de l'utilisateur authentifié",
                 "operationId": "24b2153f6bf0f1d06c91cdd8fb542198",
                 "responses": {
                     "200": {
                         "description": "Liste des catégories récupérée"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
                     }
                 },
                 "security": [
@@ -158,10 +161,20 @@
                                         "type": "string",
                                         "example": "Pizzas"
                                     },
+                                    "description": {
+                                        "description": "max:256",
+                                        "type": "string",
+                                        "example": "this pizzas is very good"
+                                    },
                                     "image": {
                                         "description": "Image de la catégorie (jpeg, png, jpg, webp)",
                                         "type": "string",
                                         "format": "binary"
+                                    },
+                                    "color": {
+                                        "description": "Champ optionnel pour aider le front-end",
+                                        "type": "string",
+                                        "example": "red"
                                     }
                                 },
                                 "type": "object"
@@ -172,6 +185,15 @@
                 "responses": {
                     "201": {
                         "description": "Catégorie créée avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé, réservé aux administrateurs"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
                     }
                 },
                 "security": [
@@ -202,6 +224,12 @@
                 "responses": {
                     "200": {
                         "description": "Détails de la catégorie récupérés"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "404": {
+                        "description": "Catégorie introuvable"
                     }
                 },
                 "security": [
@@ -215,6 +243,7 @@
                     "Catégories"
                 ],
                 "summary": "Modifier une catégorie existante",
+                "description": "Requête envoyée en POST avec _method=PUT pour permettre l'envoi de fichiers via multipart/form-data dans Swagger/Laravel.",
                 "operationId": "cbf4800ab4c11f1a824259a93fbf4429",
                 "parameters": [
                     {
@@ -238,18 +267,29 @@
                                 ],
                                 "properties": {
                                     "_method": {
-                                        "description": "Astuce Laravel (Obligatoire)",
+                                        "description": "Astuce Laravel pour simuler la méthode PUT",
                                         "type": "string",
                                         "example": "PUT"
                                     },
                                     "name": {
+                                        "description": "min:3 | max:64",
                                         "type": "string",
                                         "example": "Burgers M"
                                     },
+                                    "description": {
+                                        "description": "max:256",
+                                        "type": "string",
+                                        "example": "this pizzas isn't good anymore"
+                                    },
                                     "image": {
-                                        "description": "Nouvelle image (Optionnelle)",
+                                        "description": "Nouvelle image optionnelle",
                                         "type": "string",
                                         "format": "binary"
+                                    },
+                                    "color": {
+                                        "description": "Champ optionnel pour aider le front-end",
+                                        "type": "string",
+                                        "example": "green"
                                     }
                                 },
                                 "type": "object"
@@ -260,6 +300,18 @@
                 "responses": {
                     "200": {
                         "description": "Catégorie mise à jour avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé ou action non autorisée"
+                    },
+                    "404": {
+                        "description": "Catégorie introuvable"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
                     }
                 },
                 "security": [
@@ -288,6 +340,15 @@
                 "responses": {
                     "200": {
                         "description": "Catégorie supprimée avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé ou action non autorisée"
+                    },
+                    "404": {
+                        "description": "Catégorie introuvable"
                     }
                 },
                 "security": [
@@ -325,7 +386,7 @@
                                 ],
                                 "properties": {
                                     "plat_id": {
-                                        "description": "L'ID du plat existant",
+                                        "description": "ID du plat existant",
                                         "type": "integer",
                                         "example": 1
                                     }
@@ -338,6 +399,206 @@
                 "responses": {
                     "200": {
                         "description": "Le plat a été ajouté à la catégorie avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé ou action non autorisée"
+                    },
+                    "404": {
+                        "description": "Plat ou catégorie introuvable"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ingredients": {
+            "get": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Afficher la liste de tous les ingrédients",
+                "operationId": "21a10036f4eb7a5b70c94dad3723a6a5",
+                "responses": {
+                    "200": {
+                        "description": "Liste des ingrédients récupérée avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé, réservé aux administrateurs"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Ajouter un nouvel ingrédient",
+                "operationId": "1650437c5b0d82622aa7f126153b6703",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "tags"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "min:3 | max:30 | unique",
+                                        "type": "string",
+                                        "example": "Tomato"
+                                    },
+                                    "tags": {
+                                        "description": "Liste de tags liés à l'ingrédient",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "vegetable"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ingrédient créé avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé, réservé aux administrateurs"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ingredients/{id}": {
+            "put": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Modifier un ingrédient existant",
+                "operationId": "a1e72ca414694ca6c93339f93a743aab",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'ingrédient à modifier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "tags"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "min:3 | max:30 | unique",
+                                        "type": "string",
+                                        "example": "Onion"
+                                    },
+                                    "tags": {
+                                        "description": "Liste de tags liés à l'ingrédient",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "vegetable"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ingrédient mis à jour avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé, réservé aux administrateurs"
+                    },
+                    "404": {
+                        "description": "Ingrédient introuvable"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Ingredients"
+                ],
+                "summary": "Supprimer un ingrédient",
+                "operationId": "60c1b59e0a5f33047bd119e96a6f9d0a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'ingrédient à supprimer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ingrédient supprimé avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé, réservé aux administrateurs"
+                    },
+                    "404": {
+                        "description": "Ingrédient introuvable"
                     }
                 },
                 "security": [
@@ -352,11 +613,14 @@
                 "tags": [
                     "Plats"
                 ],
-                "summary": "Afficher la liste des plats de l'utilisateur",
+                "summary": "Afficher la liste des plats de l'utilisateur authentifié",
                 "operationId": "7ee5af8650ad8f31e1889c9e119497f3",
                 "responses": {
                     "200": {
                         "description": "Liste des plats récupérée avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
                     }
                 },
                 "security": [
@@ -401,6 +665,14 @@
                                         "description": "Image du plat (jpeg, png, jpg, webp)",
                                         "type": "string",
                                         "format": "binary"
+                                    },
+                                    "ingredient_ids": {
+                                        "description": "Liste optionnelle des IDs des ingrédients",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -411,6 +683,15 @@
                 "responses": {
                     "201": {
                         "description": "Plat créé avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé, réservé aux administrateurs"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
                     }
                 },
                 "security": [
@@ -441,6 +722,12 @@
                 "responses": {
                     "200": {
                         "description": "Détails du plat récupérés"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "404": {
+                        "description": "Plat introuvable"
                     }
                 },
                 "security": [
@@ -454,6 +741,7 @@
                     "Plats"
                 ],
                 "summary": "Modifier un plat existant",
+                "description": "Requête envoyée en POST avec _method=PUT pour permettre l'envoi de fichiers via multipart/form-data dans Swagger/Laravel.",
                 "operationId": "74121d46fd948d2c0407953566bb624d",
                 "parameters": [
                     {
@@ -479,11 +767,12 @@
                                 ],
                                 "properties": {
                                     "_method": {
-                                        "description": "Astuce Laravel pour forcer la méthode PUT",
+                                        "description": "Méthode simulée pour Laravel",
                                         "type": "string",
                                         "example": "PUT"
                                     },
                                     "name": {
+                                        "description": "min:3 | max:64",
                                         "type": "string",
                                         "example": "Tacos Viande Hachée"
                                     },
@@ -497,9 +786,22 @@
                                         "example": 50
                                     },
                                     "image": {
-                                        "description": "Nouvelle image (Optionnelle)",
+                                        "description": "Nouvelle image optionnelle",
                                         "type": "string",
                                         "format": "binary"
+                                    },
+                                    "ingredient_ids": {
+                                        "description": "Liste optionnelle des IDs des ingrédients",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "is_available": {
+                                        "description": "Disponible ou non",
+                                        "type": "integer",
+                                        "example": 1
                                     }
                                 },
                                 "type": "object"
@@ -510,6 +812,18 @@
                 "responses": {
                     "200": {
                         "description": "Plat mis à jour avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé ou action non autorisée"
+                    },
+                    "404": {
+                        "description": "Plat introuvable"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
                     }
                 },
                 "security": [
@@ -538,6 +852,244 @@
                 "responses": {
                     "200": {
                         "description": "Plat supprimé avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé ou action non autorisée"
+                    },
+                    "404": {
+                        "description": "Plat introuvable"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/profile": {
+            "post": {
+                "tags": [
+                    "Preferences"
+                ],
+                "summary": "Ajouter une nouvelle préférence pour l'utilisateur authentifié",
+                "operationId": "3f21dc40b23e803a88f5348488c7f378",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "ingredient",
+                                    "type"
+                                ],
+                                "properties": {
+                                    "ingredient": {
+                                        "description": "Nom de l'ingrédient",
+                                        "type": "string",
+                                        "example": "tomato",
+                                        "maxLength": 30
+                                    },
+                                    "type": {
+                                        "description": "Type de préférence",
+                                        "type": "string",
+                                        "example": "dislikes_it",
+                                        "enum": [
+                                            "likes_it",
+                                            "dislikes_it",
+                                            "allergic_to_it",
+                                            "not_preferred",
+                                            "forbidden"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Préférence créée avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/profile/{id}": {
+            "put": {
+                "tags": [
+                    "Preferences"
+                ],
+                "summary": "Modifier une préférence existante",
+                "operationId": "7b11647f610695703ffb037dd47a31ae",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la préférence",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "ingredient",
+                                    "type"
+                                ],
+                                "properties": {
+                                    "ingredient": {
+                                        "description": "Nom de l'ingrédient",
+                                        "type": "string",
+                                        "example": "onion",
+                                        "maxLength": 30
+                                    },
+                                    "type": {
+                                        "description": "Type de préférence",
+                                        "type": "string",
+                                        "example": "not_preferred",
+                                        "enum": [
+                                            "likes_it",
+                                            "dislikes_it",
+                                            "allergic_to_it",
+                                            "not_preferred",
+                                            "forbidden"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Préférence mise à jour avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "404": {
+                        "description": "Préférence introuvable"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/recommendations/analyze/{id}": {
+            "post": {
+                "tags": [
+                    "Recommendations"
+                ],
+                "summary": "Lancer une analyse IA pour un plat",
+                "description": "Crée une recommandation avec le statut processing puis envoie le traitement vers la queue ai.",
+                "operationId": "76dbae4e7a4c35b5e99f5d0b7fb81dc3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du plat à analyser",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Demande d'analyse reçue avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "404": {
+                        "description": "Plat introuvable"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/recommendations": {
+            "get": {
+                "tags": [
+                    "Recommendations"
+                ],
+                "summary": "Afficher l'historique des analyses IA de l'utilisateur",
+                "description": "Retourne la liste des plats qui possèdent des recommandations liées à l'utilisateur authentifié.",
+                "operationId": "6bf0b405f446a15692d855b0e80ff76e",
+                "responses": {
+                    "200": {
+                        "description": "Historique récupéré avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/recommendations/{id}": {
+            "get": {
+                "tags": [
+                    "Recommendations"
+                ],
+                "summary": "Afficher la dernière recommandation IA d'un plat",
+                "description": "Le paramètre id représente l'ID du plat, pas l'ID de la recommandation.",
+                "operationId": "2e89791062f3a76e664d281fbfd5ea07",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du plat",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dernière recommandation récupérée avec succès"
+                    },
+                    "401": {
+                        "description": "Utilisateur non authentifié"
+                    },
+                    "404": {
+                        "description": "Plat introuvable"
                     }
                 },
                 "security": [
@@ -566,8 +1118,20 @@
             "description": "Catégories"
         },
         {
+            "name": "Ingredients",
+            "description": "Ingredients"
+        },
+        {
             "name": "Plats",
             "description": "Plats"
+        },
+        {
+            "name": "Preferences",
+            "description": "Preferences"
+        },
+        {
+            "name": "Recommendations",
+            "description": "Recommendations"
         }
     ]
 }

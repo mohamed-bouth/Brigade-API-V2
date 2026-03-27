@@ -18,10 +18,10 @@ class Recommendation extends Model
     ];
 
     public function user(){
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function plat(){
-        return $this->belongsToMany(Plat::class);
+        return $this->belongsTo(Plat::class);
     }
 }

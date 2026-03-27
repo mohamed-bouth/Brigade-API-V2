@@ -31,9 +31,11 @@ Instructions:
 - Return valid JSON only
 - The response must strictly follow the required schema
 
-warning_message rules:
-- If there is a real conflict or warning, explain it briefly
-- Otherwise return an empty string
+reason rules:
+- If any allergy, forbidden, disliked, or not_preferred ingredient is found in the dish, reason must be a short factual sentence mentioning only the matching ingredients.
+- If no matching ingredient is found, reason must be a message saying the dish is very recommended because he contain no conflit
+- Do not add general advice.
+- Do not mention ingredients that are not present in the input.
 
 Input data:
 " . json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -66,15 +68,16 @@ Input data:
                     'properties' => [
                         'score' => [
                             'type' => 'integer',
+                            'minimum' => 0,
+                            'maximum' => 100,
+                            'description' => 'Compatibility score from 0 to 100 based strictly on the provided scoring rules.',
                         ],
-                        'warning_message' => [
+                        'reason' => [
                             'type' => 'string',
+                            'description' => 'Return a short factual explanation only when dish ingredients conflict with allergies, dislikes, not_preferred, or forbidden ingredients. Otherwise return an empty string.',
                         ],
                     ],
-                    'required' => [
-                        'score',
-                        'warning_message',
-                    ],
+                    'required' => ['score', 'reason'],
                 ],
                 'temperature' => 0,
             ],

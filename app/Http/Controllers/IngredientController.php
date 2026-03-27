@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
+use App\Docs\IngredientDocumentation;
 
-class IngredientController extends Controller
+class IngredientController extends Controller implements IngredientDocumentation
 {
     public function index(){
         $ingredients = Ingredient::all();
