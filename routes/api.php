@@ -18,6 +18,8 @@ use  App\Services\GeminiService;
 Route::post('register' , [AuthController::class , 'register']);
 Route::post('login' , [AuthController::class , 'login']);
 
+Route::get('test' , [UserController::class , 'test']);
+
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('logout' , [AuthController::class , 'logout']);
     

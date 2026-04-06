@@ -25,5 +25,7 @@ class UserController extends Controller
         ]);
     }
 
-    
+    public function test(){
+        return response()->json(['message' => 'the test work successefuly']);
+    }
 }
